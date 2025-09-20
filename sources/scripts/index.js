@@ -1,4 +1,53 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Mobile accordion navigation
+    function initMobileNavigation() {
+        const nav = document.querySelector('nav');
+        const navToggle = document.querySelector('.nav-toggle');
+        const navArrow = document.querySelector('.nav-arrow');
+        
+        if (navToggle && nav) {
+            // Set initial collapsed state
+            nav.classList.add('collapsed');
+            
+            navToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (nav.classList.contains('collapsed')) {
+                    nav.classList.remove('collapsed');
+                    nav.classList.add('expanded');
+                    navArrow.classList.add('down');
+                } else {
+                    nav.classList.remove('expanded');
+                    nav.classList.add('collapsed');
+                    navArrow.classList.remove('down');
+                }
+            });
+            
+            // Close when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!nav.contains(e.target)) {
+                    nav.classList.remove('expanded');
+                    nav.classList.add('collapsed');
+                    navArrow.classList.remove('down');
+                }
+            });
+            
+            // Close when clicking on a navigation link
+            const navLinks = document.querySelectorAll('.nav-menu a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    nav.classList.remove('expanded');
+                    nav.classList.add('collapsed');
+                    navArrow.classList.remove('down');
+                });
+            });
+        }
+    }
+    
+    // Initialize mobile navigation
+    initMobileNavigation();
+
     // Navbar active section tracker
     const navLinks = document.querySelectorAll('nav a');
     const sections = Array.from(navLinks).map(link => {
@@ -6,26 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return document.getElementById(id);
     });
 
-    function setActiveNav() {
-        let activeIdx = 0;
-        const scrollY = window.scrollY + 80; // Offset for sticky nav
-        sections.forEach((section, idx) => {
-            if (section && section.offsetTop <= scrollY) {
-                activeIdx = idx;
-            }
-        });
-        // Remove active-nav and focus from all links first
-        navLinks.forEach(link => {
-            link.classList.remove('active-nav');
-            link.blur();
-        });
-        // Add active-nav only to the latest active
-        if (navLinks[activeIdx]) {
-            navLinks[activeIdx].classList.add('active-nav');
-        }
-    }
-    window.addEventListener('scroll', setActiveNav);
-    setActiveNav();
     // Testimony modal logic
     const testimonies = [
         {
@@ -82,34 +111,38 @@ Once again, I give all glory and honour to the Lord God Almighty who daily loade
     const modalPhoto = document.getElementById('testimonyModalPhoto');
     const modalName = document.getElementById('testimonyModalName');
     const modalBody = document.getElementById('testimonyModalBody');
-    // Open modal on card click
-    cards.forEach(function (card) {
-        card.addEventListener('click', function () {
-            const idx = parseInt(card.getAttribute('data-index'));
-            const t = testimonies[idx];
-            modalPhoto.src = t.photo;
-            modalPhoto.alt = t.photoCaption || t.name;
-            modalName.textContent = t.name;
-            modalBody.innerHTML = t.body;
-            modal.classList.add('active');
+    
+    // Only initialize testimony modal if elements exist
+    if (modal && modalClose && modalPhoto && modalName && modalBody && cards.length > 0) {
+        // Open modal on card click
+        cards.forEach(function (card) {
+            card.addEventListener('click', function () {
+                const idx = parseInt(card.getAttribute('data-index'));
+                const t = testimonies[idx];
+                modalPhoto.src = t.photo;
+                modalPhoto.alt = t.photoCaption || t.name;
+                modalName.textContent = t.name;
+                modalBody.innerHTML = t.body;
+                modal.classList.add('active');
+            });
         });
-    });
-    // Close modal
-    modalClose.addEventListener('click', function () {
-        modal.classList.remove('active');
-    });
-    // Close modal on outside click
-    modal.addEventListener('click', function (e) {
-        if (e.target === modal) {
+        // Close modal
+        modalClose.addEventListener('click', function () {
             modal.classList.remove('active');
-        }
-    });
-    // ESC key to close
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            modal.classList.remove('active');
-        }
-    });
+        });
+        // Close modal on outside click
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+        // ESC key to close
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+            }
+        });
+    }
 
     // Modal popup for all images with auto-pan on zoom
     (function () {
@@ -117,6 +150,12 @@ Once again, I give all glory and honour to the Lord God Almighty who daily loade
         const modalImg = document.getElementById('imgModalImg');
         const modalClose = document.getElementById('imgModalClose');
         const modalContentWrap = document.getElementById('imgModalContentWrap');
+        
+        // Only initialize image modal if elements exist
+        if (!modal || !modalImg || !modalClose || !modalContentWrap) {
+            return;
+        }
+        
         let scale = 1;
         let translateX = 0, translateY = 0;
 

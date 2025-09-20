@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Epunda+Slab:ital,wght@0,300..900;1,300..900&family=Handlee&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="sources/scripts/index.css">
+    <script src="sources/scripts/index.js"></script>
+    <title>Testimonies - Mission Report 2025</title>
+</head>
+
+<body>
+    <header>
+        <h1 class="header-title">Mission Report 2025</h1>
+        <p class="subtitle" style="margin-top: 0;">Cebu City | Bogo | San Antonio</p>
+    </header>
+    <nav>
+        <button class="nav-toggle">
+            Navigate to Page
+            <span class="nav-arrow">▲</span>
+        </button>
+        <div class="nav-menu">
+            <a href="introduction.html">Introduction</a>
+            <a href="mission-trip.html">Mission Trip 2025</a>
+            <a href="outreaches.html">Mission 2025 Outreaches</a>
+            <a href="testimonies.html" class="active-nav">Testimonies</a>
+            <a href="preparatory.html">Preparatory Works</a>
+            <a href="journal.html">Personal Journal</a>
+        </div>
+    </nav>
+    <div class="container">
+        <section id="testimonies">
+            <h2 class="section-title">Testimonies of the Almighty's Goodness</h2>
+            <div class="testimony-cards">
+                <!-- Example testimony card, repeat for each testimony -->
+                <div class="testimony-card" data-index="0">
+                    <img src="sources/eliezer-dp.jpg" alt="Eld & Mrs Eliezer Ortega" class="testimony-photo" />
+                    <div class="testimony-info">
+                        <div class="testimony-name">Eld Eliezer Ortega</div>
+                        <div class="testimony-quote">"Blessed be the name of the LORD, who is the God full of grace and
+                            mercy..."</div>
+                    </div>
+                </div>
+                <div class="testimony-card" data-index="1">
+                    <img src="sources/dnsDiana.jpg" alt="Dns Diana Chan with one of the CRMC students"
+                        class="testimony-photo" />
+                    <div class="testimony-info">
+                        <div class="testimony-name">Dns Diana Chan</div>
+                        <div class="testimony-quote">"My heart is filled with awe and reverence for the Lord, and my
+                            soul sings, 'How great Thou art!'"</div>
+                    </div>
+                </div>
+                <div class="testimony-card" data-index="2">
+                    <img src="sources/eldChoy.jpg" alt="Eld & Mrs Alan Choy" class="testimony-photo" />
+                    <div class="testimony-info">
+                        <div class="testimony-name">Eld & Mrs Alan Choy</div>
+                        <div class="testimony-quote">"Thank God for moving the hearts of Luan Kheng and myself to sign
+                            up for this mission trip..."</div>
+                    </div>
+                </div>
+                <!-- Add more cards for each testimony -->
+            </div>
+            <!-- Modal for full testimony -->
+            <div class="testimony-modal" id="testimonyModal">
+                <div class="testimony-modal-content">
+                    <button class="testimony-modal-close" id="testimonyModalClose" aria-label="Close">&times;</button>
+                    <div class="testimony-modal-flex">
+                        <div style="display:flex; flex-direction:column; align-items:center;">
+                            <img src="" alt="Photo" class="testimony-modal-photo" id="testimonyModalPhoto" />
+                            <div class="testimony-modal-imgcaption" id="testimonyModalImgCaption"
+                                style="text-align:center; color:#444; font-size:1rem; margin-top:0.5rem;"></div>
+                        </div>
+                        <div class="testimony-modal-text">
+                            <div class="testimony-modal-name" id="testimonyModalName"></div>
+                            <div class="testimony-modal-body" id="testimonyModalBody"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="img-modal" id="imgModal">
+        <button class="img-modal-close" id="imgModalClose" aria-label="Close">&times;</button>
+        <div id="imgModalContentWrap"
+            style="display: flex; flex-direction: column; align-items: center; background: #fff; border: 6px solid #fff; border-radius: 18px; box-shadow: 0 2px 16px rgba(0,0,0,0.10); padding:0 0.2rem; max-width: 90%;">
+            <img src="" alt="Full Image" class="img-modal-content" id="imgModalImg"
+                style="display:block; max-width:100%; height:auto; border-radius: 12px;" />
+            <div class="img-modal-caption" id="imgModalCaption"
+                style="text-align:center; color:#444; font-size:1rem; margin-top:0.5rem;"></div>
+        </div>
+    </div>
+</body>
+
+</html>

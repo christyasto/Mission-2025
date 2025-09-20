@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -9,6 +10,10 @@
     <link rel="stylesheet" href="sources/scripts/index.css">
     <script src="sources/scripts/index.js"></script>
     <title>Mission Report 2025</title>
+    <script>
+        // Redirect to introduction page
+        window.location.href = 'introduction.html';
+    </script>
 </head>
 
 <body>
@@ -17,14 +22,28 @@
         <p class="subtitle" style="margin-top: 0;">Cebu City | Bogo | San Antonio</p>
     </header>
     <nav>
-        <a href="#introduction">Introduction</a>
-        <a href="#mission-cebu">Mission Trip 2025</a>
-        <a href="#mission-outreaches">Mission 2025 Outreaches</a>
-        <a href="#testimonies">Testimonies</a>
-        <a href="#preparatory">Preparatory Works</a>
-        <a href="#journal">Personal Journal</a>
+        <button class="nav-toggle">
+            Navigate to Page
+            <span class="nav-arrow">▲</span>
+        </button>
+        <div class="nav-menu">
+            <a href="introduction.html">Introduction</a>
+            <a href="mission-trip.html">Mission Trip 2025</a>
+            <a href="outreaches.html">Mission 2025 Outreaches</a>
+            <a href="testimonies.html">Testimonies</a>
+            <a href="preparatory.html">Preparatory Works</a>
+            <a href="journal.html">Personal Journal</a>
+        </div>
     </nav>
     <div class="container">
+        <section>
+            <h2 class="section-title">Welcome to Mission Report 2025</h2>
+            <p>You are being redirected to the Introduction page. If you are not redirected automatically, please <a href="introduction.html">click here</a>.</p>
+        </section>
+    </div>
+</body>
+
+</html>
         <section id="introduction">
             <h2></h2>
             <h2 class="section-title">Introduction to Our Mission Churches in the Philippines</h2>
