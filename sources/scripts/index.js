@@ -1,13 +1,17 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Mobile accordion navigation
-    function initMobileNavigation() {
-        const nav = document.querySelector('nav');
-        const navToggle = document.querySelector('.nav-toggle');
-        const navArrow = document.querySelector('.nav-arrow');
-        
-        if (navToggle && nav) {
-            // Set initial collapsed state
-            nav.classList.add('collapsed');
+    // Add a small delay to ensure all elements are rendered
+    setTimeout(function() {
+        // Mobile accordion navigation
+        function initMobileNavigation() {
+            const nav = document.querySelector('nav');
+            const navToggle = document.querySelector('.nav-toggle');
+            const navArrow = document.querySelector('.nav-arrow');
+            
+            console.log('Initializing navigation:', { nav: !!nav, navToggle: !!navToggle, navArrow: !!navArrow });
+            
+            if (navToggle && nav) {
+                // Set initial collapsed state
+                nav.classList.add('collapsed');
             
             navToggle.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -16,11 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (nav.classList.contains('collapsed')) {
                     nav.classList.remove('collapsed');
                     nav.classList.add('expanded');
-                    navArrow.classList.add('down');
+                    if (navArrow) navArrow.classList.add('down');
                 } else {
                     nav.classList.remove('expanded');
                     nav.classList.add('collapsed');
-                    navArrow.classList.remove('down');
+                    if (navArrow) navArrow.classList.remove('down');
                 }
             });
             
@@ -29,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!nav.contains(e.target)) {
                     nav.classList.remove('expanded');
                     nav.classList.add('collapsed');
-                    navArrow.classList.remove('down');
+                    if (navArrow) navArrow.classList.remove('down');
                 }
             });
             
@@ -39,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 link.addEventListener('click', function() {
                     nav.classList.remove('expanded');
                     nav.classList.add('collapsed');
-                    navArrow.classList.remove('down');
+                    if (navArrow) navArrow.classList.remove('down');
                 });
             });
         }
@@ -288,4 +292,5 @@ Once again, I give all glory and honour to the Lord God Almighty who daily loade
             modalContentWrap.style.transform = `scale(${scale}) translate(${-translateX}px, ${-translateY}px)`;
         });
     })()
+    }, 50); // 50ms delay to ensure DOM is fully rendered
 });
