@@ -60,6 +60,127 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialize foldable detection
     handleFoldableDevice();
 
+    // Low bandwidth optimizations
+    function initLowBandwidthOptimizations() {
+        // Detect slow connection
+        let isSlowConnection = false;
+        
+        if ('connection' in navigator) {
+            const connection = navigator.connection;
+            // Consider 2G, slow-2g, or effective type 'slow-2g' as slow
+            isSlowConnection = connection.effectiveType === 'slow-2g' || 
+                              connection.effectiveType === '2g' ||
+                              connection.downlink < 1.5; // Less than 1.5 Mbps
+            
+            console.log('Connection detected:', {
+                effectiveType: connection.effectiveType,
+                downlink: connection.downlink,
+                isSlowConnection: isSlowConnection
+            });
+        }
+        
+        // Add low bandwidth class for styling
+        if (isSlowConnection) {
+            document.body.classList.add('low-bandwidth');
+        }
+        
+        // Implement lazy loading for images
+        function implementLazyLoading() {
+            const images = document.querySelectorAll('img:not([data-lazy-loaded])');
+            
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        
+                        // Store original src if not already done
+                        if (!img.dataset.originalSrc && img.src) {
+                            img.dataset.originalSrc = img.src;
+                        }
+                        
+                        // Load image
+                        if (img.dataset.originalSrc) {
+                            img.src = img.dataset.originalSrc;
+                            img.dataset.lazyLoaded = 'true';
+                        }
+                        
+                        observer.unobserve(img);
+                    }
+                });
+            }, {
+                rootMargin: '50px' // Start loading 50px before image enters viewport
+            });
+            
+            // Setup lazy loading for all images
+            images.forEach(img => {
+                // Move src to data attribute for lazy loading
+                if (img.src && !img.dataset.originalSrc) {
+                    img.dataset.originalSrc = img.src;
+                    img.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMSIgaGVpZ2h0PSIxIiB2aWV3Qm94PSIwIDAgMSAxIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNmNWY1ZjUiLz48L3N2Zz4=';
+                }
+                imageObserver.observe(img);
+            });
+        }
+        
+        // Critical images (above fold) should load immediately
+        function loadCriticalImages() {
+            const criticalImages = document.querySelectorAll('.intro-img, .testimony-photo:first-child, [data-critical="true"]');
+            criticalImages.forEach(img => {
+                if (img.dataset.originalSrc) {
+                    img.src = img.dataset.originalSrc;
+                    img.dataset.lazyLoaded = 'true';
+                }
+            });
+        }
+        
+        // Initialize optimizations
+        if (isSlowConnection) {
+            implementLazyLoading();
+            
+            // Delay non-critical features
+            setTimeout(() => {
+                loadCriticalImages();
+            }, 1000);
+        } else {
+            // Normal connection - load critical images immediately
+            loadCriticalImages();
+            
+            // Still implement lazy loading for off-screen images
+            setTimeout(implementLazyLoading, 100);
+        }
+        
+        // Preload next page on hover (for fast connections only)
+        if (!isSlowConnection) {
+            document.querySelectorAll('.section-nav-link').forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    const href = this.getAttribute('href');
+                    if (href && !href.startsWith('#')) {
+                        const linkElement = document.createElement('link');
+                        linkElement.rel = 'prefetch';
+                        linkElement.href = href;
+                        document.head.appendChild(linkElement);
+                    }
+                }, { once: true });
+            });
+        }
+    }
+    
+    // Initialize low bandwidth optimizations
+    initLowBandwidthOptimizations();
+    
+    // Register Service Worker for offline support and caching
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then((registration) => {
+                    console.log('Service Worker registered successfully:', registration.scope);
+                })
+                .catch((error) => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        });
+    }
+
     // Mobile back button handler for modals
     let modalHistoryState = false;
     

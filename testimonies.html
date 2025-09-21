@@ -4,10 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Preconnect to Google Fonts for faster loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Load fonts with display=swap for better performance -->
     <link
         href="https://fonts.googleapis.com/css2?family=Epunda+Slab:ital,wght@0,300..900;1,300..900&family=Handlee&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="sources/scripts/index.css">
+        rel="stylesheet"
+        media="print" onload="this.media='all'">
+    <!-- Fallback for users with JS disabled -->
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Epunda+Slab:ital,wght@0,300..900;1,300..900&family=Handlee&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+            rel="stylesheet">
+    </noscript>
+    <link rel="stylesheet" href="sources/scripts/index.css?v=20250921">
     <script src="sources/scripts/index.js"></script>
     <title>Testimonies - Mission Report 2025</title>
 </head>
