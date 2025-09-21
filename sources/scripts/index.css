@@ -822,8 +822,6 @@ h2 {
     color: #3d4022;
 }
 
-
-
 /* Section Navigation */
 .section-navigation {
     display: -webkit-box;
@@ -838,7 +836,6 @@ h2 {
     margin: 3rem 0 2rem 0;
     padding: 1.5rem 0;
     border-top: 2px solid #e0ddd4;
-    /* Fallback for browsers without gap support */
     gap: 1rem;
 }
 
