@@ -1,4 +1,136 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Foldable device detection and handling
+    function handleFoldableDevice() {
+        const screenWidth = window.screen.width;
+        const screenHeight = window.screen.height;
+        const viewportWidth = window.innerWidth;
+        const aspectRatio = screenWidth / screenHeight;
+        
+        // Detect Samsung Z Fold and similar devices
+        const isFoldable = (
+            // Samsung Z Fold 4/5 dimensions (unfolded: ~2176x1812, folded: ~904x2176)
+            (screenWidth > 2000 && screenHeight > 1800) ||
+            // Very wide aspect ratio suggests foldable unfolded
+            (aspectRatio > 1.8 && viewportWidth > 1000) ||
+            // CSS Foldable API detection
+            ('screen' in window && 'fold' in screen)
+        );
+        
+        if (isFoldable) {
+            document.body.classList.add('foldable-device');
+            console.log('Foldable device detected');
+        } else {
+            document.body.classList.remove('foldable-device');
+        }
+        
+        // Trigger layout updates for testimony cards when fold state changes
+        if (typeof allocateCardWidths === 'function') {
+            setTimeout(() => {
+                allocateCardWidths();
+                if (typeof matchPairHeights === 'function') {
+                    setTimeout(matchPairHeights, 100);
+                }
+            }, 200);
+        }
+        
+        // Handle viewport changes (fold/unfold events)
+        if ('screen' in window && 'addEventListener' in screen) {
+            screen.addEventListener('change', handleFoldableDevice);
+        }
+        
+        // Also listen for resize events with debouncing
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                handleFoldableDevice();
+                // Also trigger testimony card updates on any resize
+                if (typeof allocateCardWidths === 'function') {
+                    allocateCardWidths();
+                    setTimeout(() => {
+                        if (typeof matchPairHeights === 'function') {
+                            matchPairHeights();
+                        }
+                    }, 100);
+                }
+            }, 250);
+        });
+    }
+    
+    // Initialize foldable detection
+    handleFoldableDevice();
+
+    // Mobile back button handler for modals
+    let modalHistoryState = false;
+    
+    function setupModalBackHandler() {
+        // Track when modals are opened/closed
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    const target = mutation.target;
+                    
+                    // Check if this is a modal element
+                    if (target.classList.contains('testimony-modal') || 
+                        target.classList.contains('img-modal') ||
+                        target.id === 'testimonyModal' ||
+                        target.id === 'imgModal') {
+                        
+                        if (target.classList.contains('active')) {
+                            // Modal opened - add history state
+                            if (!modalHistoryState) {
+                                history.pushState({ modal: true }, '', '');
+                                modalHistoryState = true;
+                            }
+                        } else {
+                            // Modal closed - remove history state if it was added by modal
+                            if (modalHistoryState) {
+                                modalHistoryState = false;
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Observe all potential modal elements
+        const modals = document.querySelectorAll('.testimony-modal, .img-modal, #testimonyModal, #imgModal');
+        modals.forEach(modal => {
+            if (modal) {
+                observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
+            }
+        });
+        
+        // Handle back button presses
+        window.addEventListener('popstate', function(event) {
+            if (event.state && event.state.modal) {
+                // This was a modal history state, don't do anything special
+                return;
+            }
+            
+            // Check if any modal is currently open
+            const openModals = document.querySelectorAll('.testimony-modal.active, .img-modal.active, #testimonyModal.active, #imgModal.active');
+            
+            if (openModals.length > 0) {
+                // Close all open modals
+                openModals.forEach(modal => {
+                    modal.classList.remove('active');
+                });
+                
+                // Prevent default back navigation
+                history.pushState({ modal: false }, '', '');
+                modalHistoryState = false;
+                
+                // Prevent the default back action
+                event.preventDefault();
+                return false;
+            }
+        });
+    }
+    
+    // Initialize modal back handler
+    setupModalBackHandler();
+
     // Add a small delay to ensure all elements are rendered
     setTimeout(function () {
         // Mobile accordion navigation
@@ -143,11 +275,15 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 100);
 
         // Re-match heights on window resize
-        let resizeTimeout;
+        let testimonyResizeTimeout;
         window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                matchPairHeights();
+            clearTimeout(testimonyResizeTimeout);
+            testimonyResizeTimeout = setTimeout(() => {
+                // Reallocate widths and heights for responsive changes (including foldables)
+                allocateCardWidths();
+                setTimeout(() => {
+                    matchPairHeights();
+                }, 100);
             }, 250);
         });
 
@@ -178,7 +314,7 @@ Once again, I give all glory and honour to the Lord God Almighty who daily loade
             {
                 name: "Dns Diana Chan",
                 photos: [
-                    ["sources/dnsDiana1.jpg", "Pastor Koshy praying for M25 at Changi Airport"],
+                    ["sources/dnsdiana1.jpg", "Pastor Koshy praying for M25 at Changi Airport"],
                     ["sources/dnsDiana2.jpg", "Praying with the sisters from San Antonio and Bogo churches"],
                     ["sources/dnsDiana3.jpg", "Official closing of M25 with a combined Prayer meeting with Cebu City brethren"]
                 ],

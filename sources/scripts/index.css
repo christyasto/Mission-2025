@@ -1188,3 +1188,128 @@ h2 {
         font-size: 0.8rem;
     }
 }
+
+/* Samsung Z Fold and other foldable device fixes */
+/* Detect foldable devices by unusual aspect ratios and wide screens */
+@media screen and (min-width: 768px) and (max-width: 1024px) and (min-aspect-ratio: 1.5) {
+    /* Override problematic vw units for foldables */
+    .testimony-modal-content {
+        width: 90% !important;
+        max-width: 700px !important;
+    }
+    
+    .modal-content {
+        width: 90% !important;
+        max-width: 800px !important;
+    }
+    
+    /* Fix image modal widths */
+    .img-modal-content {
+        width: 85% !important;
+        max-width: 90% !important;
+    }
+    
+    /* Adjust container padding and margins */
+    .container, .content-container {
+        padding: 2rem 5% !important;
+        margin: 0 auto !important;
+    }
+}
+
+/* Samsung Z Fold unfolded (very wide screen) */
+@media screen and (min-width: 1024px) and (max-width: 1400px) and (min-aspect-ratio: 2) {
+    .testimony-modal-content {
+        width: 70% !important;
+        max-width: 900px !important;
+    }
+    
+    .modal-content {
+        width: 75% !important;
+        max-width: 1000px !important;
+    }
+    
+    .container, .content-container {
+        padding: 2rem 8% !important;
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+    }
+}
+
+/* General foldable device detection using CSS environment variables */
+@supports (env(fold-left)) or (env(fold-top)) {
+    .testimony-modal-content,
+    .modal-content {
+        width: 85% !important;
+        max-width: 800px !important;
+    }
+    
+    .container, .content-container {
+        padding: 2rem 4% !important;
+        margin: 0 auto !important;
+    }
+}
+
+/* JavaScript-detected foldable devices */
+.foldable-device .testimony-modal-content {
+    width: 80% !important;
+    max-width: 750px !important;
+}
+
+.foldable-device .modal-content {
+    width: 80% !important;
+    max-width: 850px !important;
+}
+
+.foldable-device .img-modal-content {
+    width: 75% !important;
+    max-width: 85% !important;
+}
+
+.foldable-device .container,
+.foldable-device .content-container {
+    padding: 2rem 6% !important;
+    max-width: 1100px !important;
+    margin: 0 auto !important;
+}
+
+/* Fix testimony cards grid for foldables */
+.foldable-device .testimony-cards {
+    padding: 0 4% !important;
+    gap: 1rem !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Smooth transitions for fold/unfold */
+.foldable-device .testimony-card {
+    transition: all 0.3s ease !important;
+}
+
+/* Specific responsive handling for Z Fold dimensions */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .foldable-device .testimony-cards {
+        grid-template-columns: repeat(6, 1fr) !important;
+        gap: 1.2rem !important;
+    }
+    
+    .foldable-device .testimony-card.width-2 { grid-column: span 2 !important; }
+    .foldable-device .testimony-card.width-3 { grid-column: span 2 !important; }
+    .foldable-device .testimony-card.width-4 { grid-column: span 3 !important; }
+    .foldable-device .testimony-card.width-5 { grid-column: span 3 !important; }
+    .foldable-device .testimony-card.width-6 { grid-column: span 3 !important; }
+}
+
+/* Z Fold fully unfolded (very wide) */
+@media screen and (min-width: 1024px) and (max-width: 1400px) {
+    .foldable-device .testimony-cards {
+        grid-template-columns: repeat(10, 1fr) !important;
+        gap: 1.5rem !important;
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+    }
+    
+    .foldable-device .testimony-card.width-2 { grid-column: span 3 !important; }
+    .foldable-device .testimony-card.width-3 { grid-column: span 4 !important; }
+    .foldable-device .testimony-card.width-4 { grid-column: span 5 !important; }
+    .foldable-device .testimony-card.width-5 { grid-column: span 6 !important; }
+    .foldable-device .testimony-card.width-6 { grid-column: span 7 !important; }
+}
